@@ -1,0 +1,115 @@
+const char MAIN_page[] PROGMEM = R"=====(
+<!doctype html>
+<html>
+<head>
+<title>IoT Motion detector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <h1 style="text-align:center; color:red;font-size: 2.5rem;">IoT Motion Detector</h1>
+  <style>
+  canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+  #data_table {
+    font-family: New Times Roman;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  #data_table td, #data_table th {
+    border: 3px solid #ddd;
+    padding: 15px;
+  }
+  #data_table tr:nth-child(even){background-color: #f7dada;}
+  #data_table tr:hover {background-color: #f7dada;}
+  #data_table th {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    background-color: #e00909;
+    color: white;
+  }
+  </style>
+</head>
+<body>   
+<div>
+  <table id="data_table">
+    <tr><th>Time</th><th>Activity</th></tr>
+  </table>
+</div>
+<br>
+<br>  
+<script>
+
+var Avalues = [];
+var dateStamp = [];
+
+setInterval(function() {
+  getData();
+}, 3000); 
+function getData() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+  var date = new Date();
+  var txt = this.responseText;
+  var obj = JSON.parse(txt); 
+      Avalues.push(obj.Activity);
+      dateStamp.push(date);
+
+    var table = document.getElementById("data_table");
+    var row = table.insertRow(1); 
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+    cell1.innerHTML = date;
+    cell2.innerHTML = obj.Activity;
+    }
+  };
+  xhttp.open("GET", "read_data", true); 
+  xhttp.send();
+}    
+</script>
+</body>
+</html>
+
+)====="; 
+We will start with the title of the web page. The <title> tag will indicate the beginning of the title and the </title> tag will indicate the ending. In between these tags, we will specify “ IoT Motion detector ” which will be displayed in the browser’s title bar.
+<title>IoT Motion detector</title>
+Next, we will create a meta tag to make sure our web server is available for all browsers e.g., smartphones, laptops, computers etc.
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+We will insert the heading as “IoT Motion Detector” in blue colour and specify the font size and text allignment.
+<h1 style="text-align:center; color:red;font-size: 2.5rem;">IoT Motion Detector</h1>
+Next, we will include the <style> </style> tags which mark the beginning and end of the CSS styling file. We will set the display text to font type Times New Roman and align it in the centre of the webpage. For all the different texts, the font size, font type, colour, positioning and everything relating to the overall visuals of the web page will be is specified. This section of code shows the CSS styling which we will incorporate in our web page.
+  <style>
+  canvas{
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+  }
+  #data_table {
+    font-family: New Times Roman;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  #data_table td, #data_table th {
+    border: 3px solid #ddd;
+    padding: 15px;
+  }
+  #data_table tr:nth-child(even){background-color: #f7dada;}
+  #data_table tr:hover {background-color: #f7dada;}
+  #data_table th {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+    background-color: #e00909;
+    color: white;
+  }
+  </style>
+Our IoT Detection web server will display the data in the form of a table. It will have two columns. The first columns will show the Date/Time when the motion will be detected. The second column will display the status of the motion detection which we will specify as Activity.
+<table id="data_table">
+    <tr><th>Time</th><th>Activity</th></tr>
+  </table>
